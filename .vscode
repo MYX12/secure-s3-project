@@ -1,0 +1,8 @@
+{
+"files.associations": {
+        "terragrunt.hcl": "terraform",
+        "*.tfvars": "terraform",
+        "*.tf": "terraform",
+        "*.tf.override": "terraform",
+    }
+}
