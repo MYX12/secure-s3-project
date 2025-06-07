@@ -1,61 +1,79 @@
-Secure Cloud Infrastructure with Terraform & EKS + Helm CI/CD
+# Secure Cloud Infrastructure with Terraform & EKS + Helm CI/CD
 
 This project demonstrates how to build an enterprise-ready AWS infrastructure using Terraform, and deploy a Kubernetes-based web application using Amazon EKS and Helm, integrated with GitHub Actions CI/CD.
 
-It covers:
-	•	Infrastructure as Code (IaC) with Terraform
-	•	AWS EKS cluster provisioning
-	•	Helm chart deployment of Nginx
-	•	CI/CD pipeline automation via GitHub Actions
+## Project Objectives
 
-⸻————————————————————————————————————————————————————————————————
+- Provision Infrastructure as Code (IaC) with Terraform
+- Set up an EKS cluster with proper IAM roles and security controls
+- Deploy Nginx via Helm Charts on the EKS cluster
+- Automate Helm-based Kubernetes deployment with GitHub Actions CI/CD pipeline
 
- Tech Stack
-	•	Terraform: Automate VPC, subnet, EC2, EKS provisioning
-	•	Amazon EKS: Managed Kubernetes cluster on AWS
-	•	Helm: Kubernetes package manager to manage application deployment
-	•	GitHub Actions: CI/CD workflow to automate infrastructure and application delivery
-	•	AWS Services: EC2, VPC, IAM, S3, CloudWatch, Internet Gateway, Route Tables
-_____________________________________________________________________
-Project Structure
+---
+
+## Tech Stack
+
+- **Terraform**: Automate VPC, subnet, EC2, S3, IAM, CloudWatch, and EKS provisioning  
+- **Amazon EKS**: Managed Kubernetes cluster on AWS  
+- **Helm**: Kubernetes package manager for app deployments  
+- **GitHub Actions**: CI/CD workflow to automate infrastructure and application delivery  
+- **AWS Services**: VPC, IAM, EC2, EKS, S3, DynamoDB, Internet Gateway, Route Tables  
+
+---
+
+## Project Structure
+
+<pre>
+```text
 secure-s3-project/
 ├── .github/workflows/        # CI/CD workflow definitions
-│   ├── terraform.yml
-│   └── helm-cicd.yml
-├── terraform/                # Terraform state backend
-├── network/                  # Terraform modules for networking
-├── my-nginx/                 # Helm chart for nginx
+│   ├── terraform.yml         # Terraform validation & plan
+│   └── helm-cicd.yaml        # Helm-based Kubernetes deployment
+├── terraform/                # Terraform state backend (S3 + DynamoDB)
+├── network/                  # Terraform modules: VPC, subnet, route tables, SG, EC2, EKS
+├── my-nginx/                 # Helm chart for nginx deployment
 │   ├── charts/
 │   ├── templates/
 │   ├── Chart.yaml
 │   └── values.yaml
 ├── main.tf                   # Root Terraform configuration
-├── backend.tf                # Terraform remote state
-├── variables.tf              # Variable definitions
-├── lock.tf                   # DynamoDB state lock config
-├── nginx-deployment.yaml     # Raw manifest (for comparison)
+├── backend.tf                # Terraform backend config (S3 & DynamoDB)
+├── variables.tf              # Centralized input variables
+├── lock.tf                   # DynamoDB lock for Terraform state
+├── s3.tf                     # Secure encrypted S3 bucket configuration
+├── nginx-deployment.yaml     # Kubernetes manifest (for comparison use)
 └── README.md
 
-Key Features
- Project 3: Terraform-Based AWS Infrastructure
-	•	Custom VPC with public & private subnets (multi-AZ)
-	•	Internet Gateway and NAT Gateway routing
-	•	EC2 instance provisioning
-	•	S3 bucket with default encryption
-	•	CloudWatch alarm + SNS integration
-	•	EKS Cluster provisioning with proper IAM roles
+</pre>
+---
 
- Project 4: Kubernetes + Helm + CI/CD Deployment
-	•	Helm chart-based nginx web deployment
-	•	LoadBalancer service exposing public IP
-	•	GitHub Actions CI/CD pipeline:
-	•	Validates Terraform code
-	•	Installs kubectl and helm
-	•	Configures AWS credentials securely
-	•	Applies Helm charts to EKS
+###  CI/CD Pipelines (GitHub Actions)
 
-Screenshot:
+#### 1. `terraform.yml`
 
-![image](https://github.com/user-attachments/assets/f120ed4c-0f27-4058-9f03-57045bdb3220)
+Triggers on `push` → runs:
 
-![image](https://github.com/user-attachments/assets/19a7259d-f4ba-47af-855e-3a9768508b78)
+- `terraform init`
+- `terraform validate`
+- `terraform plan`
+
+#### 2. `helm-cicd.yaml`
+
+Triggers on `push` → runs:
+
+- Set up `kubectl` and `helm`
+- Configure AWS credentials
+- `aws eks update-kubeconfig`
+- `helm upgrade --install my-nginx ./my-nginx/`
+
+---
+
+### 📸 Screenshots
+
+- `kubectl get nodes` showing healthy worker nodes
+  ![image](https://github.com/user-attachments/assets/7ac1e403-1eea-432b-9044-c8d6072f3b12)
+
+- `kubectl get svc` showing Nginx `LoadBalancer` `EXTERNAL-IP`
+![image](https://github.com/user-attachments/assets/dc77fddf-d36c-43db-85ef-ee973389b77f)
+
+- GitHub Actions CI/CD run screenshot with success
