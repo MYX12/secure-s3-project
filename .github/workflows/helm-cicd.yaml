@@ -35,4 +35,4 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install my-nginx ./my-nginx/charts/my-nginx
+          helm upgrade --install my-nginx ./my-nginx
