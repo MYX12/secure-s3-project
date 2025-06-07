@@ -77,3 +77,4 @@ Triggers on `push` → runs:
 ![image](https://github.com/user-attachments/assets/dc77fddf-d36c-43db-85ef-ee973389b77f)
 
 - GitHub Actions CI/CD run screenshot with success
+![image](https://github.com/user-attachments/assets/14184541-cf34-46a1-8442-f5d1b85ce7a7)
