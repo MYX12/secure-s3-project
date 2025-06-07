@@ -2,12 +2,15 @@ name: Terraform CI
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - '**.tf'
+  pull_request:
+    paths:
+      - '**.tf'
 
 jobs:
   terraform:
-    name: Terraform Validation and Plan
+    name: Terraform Format, Validate and Plan
     runs-on: ubuntu-latest
 
     steps:
@@ -16,6 +19,11 @@ jobs:
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
 
       - name: Terraform Init
         run: terraform init
