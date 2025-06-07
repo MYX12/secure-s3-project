@@ -1,5 +1,7 @@
 name: Terraform CI
 
+
+
 on:
   push:
     paths:
@@ -12,7 +14,9 @@ jobs:
   terraform:
     name: Terraform Format, Validate and Plan
     runs-on: ubuntu-latest
-
+    env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
